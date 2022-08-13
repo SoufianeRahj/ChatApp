@@ -9,18 +9,16 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-const broadcastChatMessage = (mes) => {
-  io.emit('chat message', mes);
-}
-
 io.on('connection', (socket) => {
-    broadcastChatMessage('A user disconnected');
+    io.emit('chat message', 'A user connected');
 
     socket.on('chat message', (msg) => {
-        broadcastChatMessage(msg);
+      io.emit('chat message', msg);
       });
-      
-    socket.on('disconnect', broadcastChatMessage('A user disconnected'));
+
+    socket.on('disconnect', () => {
+      io.emit('chat message', "A user disconnected")
+    } );
   });
 
 server.listen(3000, () => {
