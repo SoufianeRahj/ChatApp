@@ -23,6 +23,14 @@
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
+
+    const addMessageToList = (msg) => {
+      let item = document.createElement('li');
+      item.textContent = msg;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight)
+    }
+
     var socket = io();
   
     var messages = document.getElementById('messages');
@@ -33,15 +41,13 @@
       e.preventDefault();
       if (input.value) {
         socket.emit('chat message', input.value);
+        addMessageToList(input.value);
         input.value = '';
       }
     });
   
     socket.on('chat message', function(msg) {
-      var item = document.createElement('li');
-      item.textContent = msg;
-      messages.appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight);
+      addMessageToList(msg);
     });
   </script>
 </html>
